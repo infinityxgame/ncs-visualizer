@@ -4,22 +4,25 @@ const path = require('path');
 function createWindow() {
     const win = new BrowserWindow({
         width: 800,
-        height: 600,
-        transparent: true, // Habilita la transparencia nativa del sistema
-        frame: false,       // Elimina la barra superior (cerrar, minimizar, maximizar)
-        alwaysOnTop: false, // Cambia a true si quieres que flote sobre los videojuegos
+        height: 800,
+        transparent: true,
+        frame: false,
+        alwaysOnTop: true,
+        resizable: true,
+        skipTaskbar: true,
+        hasShadow: false,
+        backgroundColor: '#00000000',
+        opacity: 1,
         webPreferences: {
             nodeIntegration: false,
             contextIsolation: true
         }
     });
 
-    // Maximiza la ventana para que ocupe toda la pantalla si deseas un overlay completo
-    win.maximize(); 
-
-    // Carga el archivo HTML de tu visualizador
     win.loadFile('index.html');
 }
+
+app.disableHardwareAcceleration();
 
 app.whenReady().then(() => {
     createWindow();
