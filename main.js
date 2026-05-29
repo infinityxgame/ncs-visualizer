@@ -1,4 +1,4 @@
-const { app, BrowserWindow, session, desktopCapturer } = require('electron');
+const { app, BrowserWindow, session, desktopCapturer, ipcMain } = require('electron');
 const path = require('path');
 
 function createWindow() {
@@ -22,6 +22,11 @@ function createWindow() {
     });
 
     win.loadFile('index.html');
+
+    // Handler para cerrar ventana desde el renderer
+    ipcMain.on('close-window', () => {
+        win.close();
+    });
 }
 
 app.disableHardwareAcceleration();

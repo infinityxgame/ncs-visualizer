@@ -36,12 +36,34 @@
             transition: transform 0.2s;
         }
         #btn-captura:hover { transform: translate(-50%, -50%) scale(1.05); }
+
+        #btn-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 30;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #btn-close:hover { background: rgba(255, 255, 255, 0.4); }
     </style>
 </head>
 <body>
 
 <canvas id="visualizer"></canvas>
 <button id="btn-captura">Sync audio from my PC</button>
+<button id="btn-close">×</button>
 
 
 <script src="renderer.js"></script>
@@ -49,6 +71,27 @@
 <script>
     const canvas = document.getElementById("visualizer");
     const btn = document.getElementById("btn-captura");
+    const btnClose = document.getElementById("btn-close");
+
+    // Función para cerrar la aplicación
+    function closeApp() {
+        if (window.Neutralino) {
+            Neutralino.app.exit();
+        } else if (window.electronAPI) {
+            window.electronAPI.closeWindow();
+        } else {
+            window.close();
+        }
+    }
+
+    btnClose.addEventListener("click", closeApp);
+
+    // Atajo de teclado ESC para cerrar
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+            closeApp();
+        }
+    });
 
     let audioCtx, analyser, dataArray, bufferLength;
     let amplitudes = [];

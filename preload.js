@@ -9,5 +9,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     },
     selectSource: async (sourceId) => {
         return await ipcRenderer.invoke('select-source', sourceId);
+    },
+    closeWindow: () => {
+        ipcRenderer.send('close-window');
     }
 });
