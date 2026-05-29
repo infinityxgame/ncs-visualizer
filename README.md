@@ -1,93 +1,92 @@
 # NCS Visualizer
 
-Visualizador de audio con efectos de partículas dinámicas y fireflies, construido con Electron.
+Audio visualizer with dynamic particle effects, built with Electron.
 
-## Características
+## Features
 
-- Visualización de audio en tiempo real usando WebGL2
-- Efectos de partículas dinámicas que reaccionan al ritmo
-- Fireflies que aparecen con los bajos
-- Captura de audio del sistema mediante compartir pantalla
-- Ventana transparente y personalizable
+- Real-time audio visualization using WebGL2
+- Dynamic particle effects that react to the rhythm
+- System audio capture via screen sharing
+- Transparent and customizable window
 
-## Instalación
+## Installation
 
-### Requisitos previos
+### Prerequisites
 
-- Node.js (v16 o superior)
-- npm (incluido con Node.js)
+- Node.js (v16 or higher)
+- npm (included with Node.js)
 
-### Pasos de instalación
+### Installation Steps
 
-1. Clona el repositorio o descarga el proyecto
-2. Navega al directorio del proyecto:
+1. Clone the repository or download the project
+2. Navigate to the project directory:
    ```bash
    cd ncs-visualizer
    ```
-3. Instala las dependencias:
+3. Install dependencies:
    ```bash
    npm install
    ```
 
-## Desarrollo
+## Development
 
-Para ejecutar la aplicación en modo desarrollo:
+To run the application in development mode:
 
 ```bash
 npm start
 ```
 
-## Construcción del ejecutable
+## Building the Executable
 
-Para crear el ejecutable de la aplicación:
+To create the application executable:
 
 ```bash
 npm run build
 ```
 
-### Ubicación del ejecutable
+### Executable Location
 
-Después de ejecutar `npm run build`, el ejecutable se creará en:
+After running `npm run build`, the executable will be created in:
 
 **Windows:**
-- `dist/ncs-visualizer Setup 1.0.0.exe` (instalador)
-- `dist/win-unpacked/ncs-visualizer.exe` (ejecutable portable)
+- `dist/ncs-visualizer Setup 1.0.0.exe` (installer)
+- `dist/win-unpacked/ncs-visualizer.exe` (portable executable)
 
-El ejecutable portable se encuentra en la carpeta `dist/win-unpacked/` y puede ejecutarse directamente sin instalación.
+The portable executable is located in the `dist/win-unpacked/` folder and can be run directly without installation.
 
-## Uso
+## Usage
 
-1. Ejecuta el aplicación (en desarrollo con `npm start` o el ejecutable construido)
-2. Haz clic en el botón "Sincronizar Audio de mi PC"
-3. Listo el programa selecciona automaticamente la pantalla y captura el audio
-4. El visualizador comenzará a reaccionar al audio de tu sistema
+1. Run the application (in development with `npm start` or the built executable)
+2. Click the "Sync audio from my PC" button
+3. The program automatically selects the screen and captures the audio
+4. The visualizer will start reacting to your system audio
 
-## Solución de problemas
+## Troubleshooting
 
-### El botón de compartir pantalla no funciona en el ejecutable
+### Screen sharing button doesn't work in the executable
 
-Si al hacer clic en el botón de compartir pantalla no se abre el selector de pantalla, asegúrate de que:
-- Estás usando la versión más reciente del ejecutable (reconstruye con `npm run build`)
-- Has aceptado los permisos de pantalla del sistema
+If clicking the screen sharing button doesn't open the screen selector, make sure:
+- You're using the latest version of the executable (rebuild with `npm run build`)
+- You have accepted the system screen permissions
 
-### Rendimiento lento
+### Slow performance
 
-Si experimentas rendimiento lento en sistemas sin GPU dedicada, la aplicación ya incluye optimizaciones:
-- Resolución de canvas reducida
-- Parámetros de shader optimizados
-- Tamaño de ventana ajustado (600x600)
+If you experience slow performance on systems without dedicated GPU, the application already includes optimizations:
+- Reduced canvas resolution
+- Optimized shader parameters
+- Adjusted window size (600x600)
 
-## Tecnologías utilizadas
+## Technologies Used
 
 - Electron 42.3.0
 - WebGL2
 - Node.js
 - electron-builder
 
-## Licencia
+## License
 
 ISC
 
-## Autor
+## Author
 
 InfinityxGame

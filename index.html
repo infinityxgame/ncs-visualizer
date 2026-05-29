@@ -36,14 +36,6 @@
             transition: transform 0.2s;
         }
         #btn-captura:hover { transform: translate(-50%, -50%) scale(1.05); }
-
-        .firefly-container {
-            position: absolute;
-            width: 100%; height: 100%;
-            top: 0; left: 0;
-            z-index: 1;
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
@@ -133,14 +125,6 @@
                 if (amplitudes.length > 10) {
                     amplitudes.splice(0, amplitudes.length - 10);
                 }
-
-                
-                let bass = 0;
-                const bassSamples = Math.min(10, dataArray.length);
-                for (let i = 0; i < bassSamples; i++) bass += dataArray[i];
-                bass = bass / bassSamples;
-                let opacityValue = Math.min(bass / 255, 1);
-                dynamicContainer.style.opacity = opacityValue;
             }
 
             function loopAudio() {
