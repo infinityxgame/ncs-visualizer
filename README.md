@@ -59,9 +59,8 @@ El ejecutable portable se encuentra en la carpeta `dist/win-unpacked/` y puede e
 
 1. Ejecuta el aplicación (en desarrollo con `npm start` o el ejecutable construido)
 2. Haz clic en el botón "Sincronizar Audio de mi PC"
-3. Selecciona compartir tu pantalla
-4. **Importante:** Activa la opción "Compartir audio del sistema" en el diálogo de selección
-5. El visualizador comenzará a reaccionar al audio de tu sistema
+3. Listo el programa selecciona automaticamente la pantalla y captura el audio
+4. El visualizador comenzará a reaccionar al audio de tu sistema
 
 ## Solución de problemas
 
