@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>NCS Visualizer + Dynamic Fireflies</title>
+    <title>NCS Visualizer</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -49,21 +49,14 @@
 <body>
 
 <canvas id="visualizer"></canvas>
-<button id="btn-captura">Sincronizar Audio de mi PC</button>
+<button id="btn-captura">Sync audio from my PC</button>
 
-<div class="firefly-container">
-
-</div>
-
-<div class="firefly-container" id="dynamic-fireflies">
-</div>
 
 <script src="renderer.js"></script>
 <script src="shader.js"></script>
 <script>
     const canvas = document.getElementById("visualizer");
     const btn = document.getElementById("btn-captura");
-    const dynamicContainer = document.getElementById("dynamic-fireflies");
 
     let audioCtx, analyser, dataArray, bufferLength;
     let amplitudes = [];
@@ -81,7 +74,7 @@
     const ctx = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false });
 
     if (!ctx) {
-        alert("WebGL2 no es soportado en este navegador.");
+        alert("WebGL2 is not supported in this browser.");
     }
 
     const state = rendererInit(ctx);
@@ -94,25 +87,23 @@
 
     btn.addEventListener("click", async () => {
         try {
-            // 1. Pedir capture de pantalla (lo que permita al usuario elegir)
+            
             const stream = await navigator.mediaDevices.getDisplayMedia({
                 video: true,
                 audio: true
             });
 
-            // 2. Obtener el track de audio del stream
             const audioTracks = stream.getAudioTracks();
             let finalStream = stream;
 
             if (audioTracks.length === 0) {
-                // Fallback a microfono si no hubo audio en la captura
+                
                 const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 finalStream = micStream;
             }
 
             btn.style.display = "none";
 
-            // 3. Crear AudioContext y conectar el stream
             audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             analyser = audioCtx.createAnalyser();
             analyser.fftSize = 128;
@@ -124,28 +115,26 @@
             bufferLength = analyser.frequencyBinCount;
             dataArray = new Uint8Array(bufferLength);
 
-            // Loop de audio para calcular amplitudes
             function updateAudio() {
                 if (!analyser) return;
                 analyser.getByteFrequencyData(dataArray);
 
-                // Calculamos amplitud promedio de todas las frecuencias
                 let sum = 0;
                 for (let i = 0; i < dataArray.length; i++) {
                     sum += dataArray[i];
                 }
                 const avg = sum / dataArray.length;
-                // Normalizamos a un valor entre 0 y 1 (multiplicamos por 1.8 como en el codigo original)
+
                 const amplitude = Math.min((avg / 255) * 1.8, 1.0);
 
                 const now = performance.now();
                 amplitudes.push([amplitude, now]);
-                // Keep last 10 samples
+                
                 if (amplitudes.length > 10) {
                     amplitudes.splice(0, amplitudes.length - 10);
                 }
 
-                // Efecto firefly basado en el bajo
+                
                 let bass = 0;
                 const bassSamples = Math.min(10, dataArray.length);
                 for (let i = 0; i < bassSamples; i++) bass += dataArray[i];
@@ -162,7 +151,7 @@
 
         } catch (err) {
             console.error(err);
-            alert("Para que funcione debes aceptar compartir la pantalla y activar 'Compartir audio del sistema'.");
+            alert("For it to work, you must accept screen sharing and activate 'System audio sharing'.");
         }
     });
 
@@ -173,9 +162,8 @@
 
         let target = 0;
 
-        // Usamos un sistema de suavizado mas simple y directo
         if (amplitudes.length > 0) {
-            // Tomamos el promedio de las ultimas amplitudes para un movimiento mas estable
+
             const sum = amplitudes.reduce((acc, val) => acc + val[0], 0);
             target = sum / amplitudes.length;
         }
@@ -193,9 +181,9 @@
             fgColor,
             time,
             amplitude,
-            0.7,  // sphereSize: Tamaño general equilibrado
-            0.3,  // sphereSizeVariation: Cuánto crece el círculo completo con el bajo (55% más)
-            0.22,  // noiseAmplitude: Ondas sutiles y elegantes en los bordes como el original
+            0.7,  // sphereSize: balanced overall size
+            0.3,  // sphereSizeVariation: How much does the full circle grow with the bass (55% more)
+            0.22,  // noiseAmplitude: Subtle and elegant waves at the edges, just like the original
             6,   // noiseFrequency
             150,   // dotCount
             1      // dotSize

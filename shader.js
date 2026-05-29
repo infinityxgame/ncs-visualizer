@@ -94,18 +94,13 @@ float fractalNoise(vec3 coord) {
 void main() {
     vec2 dotPos = vec2(float(gl_InstanceID % uDotCount), float(gl_InstanceID / uDotCount));
     
-    // Aumentamos la influencia del tiempo y la amplitud en el ruido
     float noise = fractalNoise(vec3(dotPos * uNoiseFrequency, uScaledTime)) * uNoiseAmplitude * (uAmplitude * 1.5);
 
-    // Mantenemos la base estructural original
     vec3 dotCenter = vec3(dotPos * uDotSpacing + uDotOffset + noise, (noise + 0.5 * uNoiseAmplitude) * uAmplitude);
     
     float distanceFromCenter = length(dotCenter);
     dotCenter /= distanceFromCenter;
     
-    // --- CAMBIO PARA EL BORDE BRUSCO ---
-    // En lugar de un límite estricto con uSphereRadius, permitimos que el radio máximo
-    // se estire hacia afuera un 25% más en base al ruido y la fuerza del bajo (uAmplitude)
     float elasticRadius = uSphereRadius + (noise * uAmplitude * 0.25);
     distanceFromCenter = min(elasticRadius, distanceFromCenter);
     
