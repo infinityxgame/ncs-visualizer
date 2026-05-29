@@ -6,7 +6,7 @@ function createWindow() {
         width: 600,
         height: 600,
         transparent: true,
-        frame: true,
+        frame: false,
         alwaysOnTop: false,
         resizable: true,
         skipTaskbar: false,
