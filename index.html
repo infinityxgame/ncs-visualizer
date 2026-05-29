@@ -106,7 +106,12 @@
         }
     }
 
-    const ctx = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false });
+    const ctx = canvas.getContext("webgl2", { 
+    alpha: true, 
+    premultipliedAlpha: false,
+    preserveDrawingBuffer: true,
+    antialias: false
+});
 
     if (!ctx) {
         alert("WebGL2 is not supported in this browser.");

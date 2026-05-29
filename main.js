@@ -29,7 +29,11 @@ function createWindow() {
     });
 }
 
-app.disableHardwareAcceleration();
+//app.disableHardwareAcceleration();
+app.commandLine.appendSwitch('disable-gpu-vsync');
+app.commandLine.appendSwitch('enable-features', 'Vulkan');
+app.commandLine.appendSwitch('ignore-gpu-blocklist');
+app.commandLine.appendSwitch('enable-gpu-rasterization');
 
 app.whenReady().then(() => {
     session.defaultSession.setDisplayMediaRequestHandler((request, callback) => {
