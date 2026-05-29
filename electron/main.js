@@ -21,7 +21,7 @@ function createWindow() {
         }
     });
 
-    win.loadFile('index.html');
+    win.loadFile('resources/index.html');
 
     // Handler para cerrar ventana desde el renderer
     ipcMain.on('close-window', () => {

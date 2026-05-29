@@ -2,7 +2,7 @@
   "name": "ncs-visualizer",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "electron/main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder",
@@ -11,12 +11,15 @@
   },
   "build": {
     "appId": "com.ncs-infinityxgame.visualizer",
+    "directories": {
+      "output": "dist/electron"
+    },
     "win": {
       "target": "portable",
       "icon": "icon.ico"
     },
     "files": [
-      "**/*",
+      "electron/**/*",
       "!node_modules/**/*"
     ]
   },
