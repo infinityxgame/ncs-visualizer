@@ -1,6 +1,6 @@
 # NCS Visualizer
 
-Audio visualizer with dynamic particle effects, built with Electron.
+Audio visualizer with dynamic particle effects, built with Electron and Neutralino.js.
 
 ## Features
 
@@ -8,6 +8,7 @@ Audio visualizer with dynamic particle effects, built with Electron.
 - Dynamic particle effects that react to the rhythm
 - System audio capture via screen sharing
 - Transparent and customizable window
+- Available in two frameworks: Electron (larger) and Neutralino.js (lighter)
 
 ## Installation
 
@@ -15,6 +16,7 @@ Audio visualizer with dynamic particle effects, built with Electron.
 
 - Node.js (v16 or higher)
 - npm (included with Node.js)
+- For Neutralino.js: `npm install -g @neutralinojs/neu`
 
 ### Installation Steps
 
@@ -30,43 +32,76 @@ Audio visualizer with dynamic particle effects, built with Electron.
 
 ## Development
 
-To run the application in development mode:
+### Electron (Development)
+
+To run the application in development mode with Electron:
 
 ```bash
 npm start
 ```
 
+### Neutralino.js (Development)
+
+To run the application in development mode with Neutralino.js:
+
+```bash
+npm run start:neutralino
+```
+
 ## Building the Executable
 
-To create the application executable:
+### Electron Build
+
+To create the Electron executable:
 
 ```bash
 npm run build
 ```
 
-### Executable Location
-
-After running `npm run build`, the executable will be created in:
-
-**Windows:**
+**Executable Location:**
 - `dist/ncs-visualizer Setup 1.0.0.exe` (installer)
 - `dist/win-unpacked/ncs-visualizer.exe` (portable executable)
 
-The portable executable is located in the `dist/win-unpacked/` folder and can be run directly without installation.
+**Size:** ~50-150MB
+
+### Neutralino.js Build
+
+To create the Neutralino.js executable:
+
+```bash
+npm run build:neutralino
+```
+
+**Executable Location:**
+- `neutralino/dist/ncs-visualizer-win.exe`
+
+**Size:** ~2-5MB (much lighter than Electron)
 
 ## Usage
 
-1. Run the application (in development with `npm start` or the built executable)
+1. Run the application (Electron: `npm start`, Neutralino: `npm run start:neutralino`, or use the built executable)
 2. Click the "Sync audio from my PC" button
 3. The program automatically selects the screen and captures the audio
 4. The visualizer will start reacting to your system audio
+
+## Framework Comparison
+
+| Feature | Electron | Neutralino.js |
+|---------|----------|---------------|
+| Executable Size | 50-150MB | 2-5MB |
+| Dependencies | Node.js, npm | Node.js, npm |
+| System Requirements | Higher | Lower |
+| Performance | Good | Better |
+| Build Time | Slower | Faster |
+
+**Recommendation:** Use Neutralino.js for smaller executables and better performance on systems without dedicated GPU. Use Electron if you need advanced Electron-specific features.
 
 ## Troubleshooting
 
 ### Screen sharing button doesn't work in the executable
 
 If clicking the screen sharing button doesn't open the screen selector, make sure:
-- You're using the latest version of the executable (rebuild with `npm run build`)
+- You're using the latest version of the executable (rebuild)
 - You have accepted the system screen permissions
 
 ### Slow performance
@@ -76,9 +111,12 @@ If you experience slow performance on systems without dedicated GPU, the applica
 - Optimized shader parameters
 - Adjusted window size (600x600)
 
+**Tip:** Try the Neutralino.js version for better performance on low-end systems.
+
 ## Technologies Used
 
 - Electron 42.3.0
+- Neutralino.js 6.7.0
 - WebGL2
 - Node.js
 - electron-builder

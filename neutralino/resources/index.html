@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>NCS Visualizer</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            width: 100%; height: 100%;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 10;
+            object-fit: contain;
+        }
+
+        #btn-captura {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            padding: 15px 30px;
+            background: #fff;
+            border: none;
+            border-radius: 4px;
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        #btn-captura:hover { transform: translate(-50%, -50%) scale(1.05); }
+    </style>
+</head>
+<body>
+
+<canvas id="visualizer"></canvas>
+<button id="btn-captura">Sync audio from my PC</button>
+
+
+<script src="renderer.js"></script>
+<script src="shader.js"></script>
+<script>
+    const canvas = document.getElementById("visualizer");
+    const btn = document.getElementById("btn-captura");
+
+    let audioCtx, analyser, dataArray, bufferLength;
+    let amplitudes = [];
+    let fgColor = [1, 0, 0];
+
+    // Ajustar resolucion del canvas
+    function updateResolution(c) {
+        const clientSize = Math.min(c.clientWidth, c.clientHeight);
+        const screenSize = Math.round(clientSize * window.devicePixelRatio * 0.7);
+        if (c.width !== screenSize || c.height !== screenSize) {
+            c.width = c.height = screenSize;
+        }
+    }
+
+    const ctx = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false });
+
+    if (!ctx) {
+        alert("WebGL2 is not supported in this browser.");
+    }
+
+    const state = rendererInit(ctx);
+    updateResolution(canvas);
+    rendererResize(ctx, state);
+
+    let lastAmplitude = 0;
+    let timer = 0;
+    let lastTime = 0;
+
+    btn.addEventListener("click", async () => {
+        try {
+            
+            const stream = await navigator.mediaDevices.getDisplayMedia({
+                video: true,
+                audio: true
+            });
+
+            const audioTracks = stream.getAudioTracks();
+            let finalStream = stream;
+
+            if (audioTracks.length === 0) {
+                
+                const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                finalStream = micStream;
+            }
+
+            btn.style.display = "none";
+
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioCtx.createAnalyser();
+            analyser.fftSize = 128;
+            analyser.smoothingTimeConstant = 0.0;
+
+            const source = audioCtx.createMediaStreamSource(finalStream);
+            source.connect(analyser);
+
+            bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
+
+            function updateAudio() {
+                if (!analyser) return;
+                analyser.getByteFrequencyData(dataArray);
+
+                let sum = 0;
+                for (let i = 0; i < dataArray.length; i++) {
+                    sum += dataArray[i];
+                }
+                const avg = sum / dataArray.length;
+
+                const amplitude = Math.min((avg / 255) * 1.8, 1.0);
+
+                const now = performance.now();
+                amplitudes.push([amplitude, now]);
+                
+                if (amplitudes.length > 10) {
+                    amplitudes.splice(0, amplitudes.length - 10);
+                }
+            }
+
+            function loopAudio() {
+                updateAudio();
+                requestAnimationFrame(loopAudio);
+            }
+            loopAudio();
+
+        } catch (err) {
+            console.error(err);
+            alert("For it to work, you must accept screen sharing and activate 'System audio sharing'.");
+        }
+    });
+
+    const render = time => {
+        const dt = (time - lastTime) / 1000;
+        lastTime = time;
+        timer += dt;
+
+        let target = 0;
+
+        if (amplitudes.length > 0) {
+
+            const sum = amplitudes.reduce((acc, val) => acc + val[0], 0);
+            target = sum / amplitudes.length;
+        }
+
+        target = Math.min(Math.max(target, 0), 1);
+        if (isNaN(target)) target = lastAmplitude;
+
+        const easing = target > lastAmplitude ? 0.85 : 0.3;
+        const amplitude = lastAmplitude + (target - lastAmplitude) * easing;
+        lastAmplitude = amplitude;
+
+        rendererRender(
+            ctx,
+            state,
+            fgColor,
+            time,
+            amplitude,
+            0.7,  // sphereSize: balanced overall size
+            0.3,  // sphereSizeVariation: How much does the full circle grow with the bass (55% more)
+            0.22,  // noiseAmplitude: Subtle and elegant waves at the edges, just like the original
+            6,   // noiseFrequency
+            150,   // dotCount
+            1      // dotSize
+        );
+
+        requestAnimationFrame(render);
+    };
+    requestAnimationFrame(render);
+
+    const resizeObserver = new ResizeObserver(() => {
+        updateResolution(canvas);
+        rendererResize(ctx, state);
+    });
+    resizeObserver.observe(canvas);
+</script>
+
+</body>
+</html>
