@@ -1,4 +1,4 @@
-# NCS Visualizer
+# NCS Visualizer.
 
 Visualizador de audio con efectos de partículas dinámicas, construido con Electron y Neutralino.js.
 
