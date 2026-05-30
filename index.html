@@ -44,19 +44,29 @@
             z-index: 30;
             width: 30px;
             height: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.8);
             border-radius: 50%;
             color: #fff;
             font-size: 20px;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            opacity: 0;
+            pointer-events: none;
         }
-        #btn-close:hover { background: rgba(255, 255, 255, 0.4); }
+        #btn-close.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #btn-close:hover {
+            background: rgba(0, 0, 0, 0.8);
+            border-color: #fff;
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
@@ -85,6 +95,16 @@
     }
 
     btnClose.addEventListener("click", closeApp);
+
+    // Mostrar botón de cerrar cuando el mouse entra en la ventana
+    document.body.addEventListener("mouseenter", () => {
+        btnClose.classList.add("visible");
+    });
+
+    // Ocultar botón de cerrar cuando el mouse sale de la ventana
+    document.body.addEventListener("mouseleave", () => {
+        btnClose.classList.remove("visible");
+    });
 
     // Atajo de teclado ESC para cerrar
     document.addEventListener("keydown", (e) => {
