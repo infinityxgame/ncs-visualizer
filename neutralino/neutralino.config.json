@@ -40,7 +40,7 @@
       "center": true,
       "fullScreen": false,
       "alwaysOnTop": false,
-      "icon": "/resources/icons/appIcon.png",
+      "icon": "/resources/icons/ncs.png",
       "enableInspector": false,
       "borderless": true,
       "transparent": true,

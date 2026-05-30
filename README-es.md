@@ -54,15 +54,23 @@ npm run start:neutralino
 
 Para crear el ejecutable de Electron:
 
+**Versión Portable:**
 ```bash
 npm run build
 ```
 
+**Versión Instalador (NSIS):**
+```bash
+npm run build:nsis
+```
+
 **Ubicación del ejecutable:**
-- `dist/ncs-visualizer Setup 1.0.0.exe` (instalador)
-- `dist/win-unpacked/ncs-visualizer.exe` (ejecutable portable)
+- Portable: `dist/NCS Visualizer-win-x64.exe`
+- Instalador: `dist/NCS Visualizer Setup 1.0.0.exe`
 
 **Tamaño:** ~50-150MB
+
+**Nota:** La versión portable puede ejecutarse directamente sin instalación. La versión instalador crea accesos directos y puede desinstalarse desde Configuración de Windows.
 
 ### Build de Neutralino.js
 
@@ -73,7 +81,7 @@ npm run build:neutralino
 ```
 
 **Ubicación del ejecutable:**
-- `neutralino/dist/ncs-visualizer-win.exe`
+- `neutralino/dist/NCS Visualizer-win.exe`
 
 **Tamaño:** ~2-5MB (mucho más ligero que Electron)
 
