@@ -87,10 +87,18 @@ npm run build:neutralino
 
 ## Usage
 
-1. Run the application (Electron: `npm start`, Neutralino: `npm run start:neutralino`, or use the built executable)
+### Electron
+1. Run the application (`npm start` or use the built executable)
 2. Click the "Sync audio from my PC" button
-3. The program automatically selects the screen and captures the audio
-4. The visualizer will start reacting to your system audio
+3. The program automatically selects your screen and captures the audio seamlessly
+4. The visualizer will start reacting to your system audio in real-time
+
+### Neutralino.js
+1. Run the application (`npm run start:neutralino` or use the built executable)
+2. Click the "Sync audio from my PC" button
+3. Select "Entire Screen" from the screen sharing options
+4. Check the "Share audio" box to capture system audio
+5. The visualizer will start reacting to your system audio in real-time
 
 ## Framework Comparison
 
