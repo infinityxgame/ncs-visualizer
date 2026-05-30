@@ -270,7 +270,7 @@ function rendererRender(gl, state, color, time, amplitude, sphereSize, sphereSiz
 	const uDotRadiusPX = uDotRadius * 0.5 * state.viewportSize;
 	const uDotSpacing = sphereSize / (uDotCount - 1);
 	const uDotOffset = -sphereSize / 2;
-	const uSphereRadius = mapLinear(uAmplitude, 0, 1, sphereSize * 0.6, sphereSize * (1.0 + sphereSizeVariation));
+	const uSphereRadius = mapLinear(uAmplitude, 0, 1, sphereSize * 0.8, sphereSize * (1.0 + sphereSizeVariation));
 	const uFeather = Math.pow(uAmplitude + 3, 2) * (45 / 1568);
 	const uNoiseFrequency = noiseFrequency / uDotCount;
 	const uNoiseAmplitude = noiseAmplitude * sphereSize;

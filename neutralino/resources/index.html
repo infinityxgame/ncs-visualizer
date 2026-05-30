@@ -304,13 +304,18 @@
         const easing = target > lastAmplitude ? 0.85 : 0.3;
         const amplitude = lastAmplitude + (target - lastAmplitude) * easing;
         lastAmplitude = amplitude;
+ 
+        // Amplitud mínima para movimiento sutil cuando no hay audio
+        const minAmplitude = 0.2;
+        const finalAmplitude = Math.max(amplitude, minAmplitude);
+        lastAmplitude = finalAmplitude;
 
         rendererRender(
             ctx,
             state,
             fgColor,
             time,
-            amplitude,
+            finalAmplitude,
             0.7,  // sphereSize: balanced overall size
             0.3,  // sphereSizeVariation: How much does the full circle grow with the bass (55% more)
             0.22,  // noiseAmplitude: Subtle and elegant waves at the edges, just like the original
