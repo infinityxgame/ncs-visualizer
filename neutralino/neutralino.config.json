@@ -64,8 +64,8 @@
       ]
     },
     "chrome": {
-      "width": 800,
-      "height": 700,
+      "width": 600,
+      "height": 600,
       "args": "--user-agent=\"Neutralinojs chrome mode\"",
       "nativeBlockList": [
         "filesystem.*",
@@ -74,7 +74,7 @@
     }
   },
   "cli": {
-    "binaryName": "ncs-visualizer",
+    "binaryName": "NCS Visualizer",
     "resourcesPath": "/resources/",
     "extensionsPath": "/extensions/",
     "clientLibrary": "/resources/js/neutralino.js",

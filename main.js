@@ -4,6 +4,7 @@ const path = require('path');
 function createWindow() {
     const win = new BrowserWindow({
         width: 600,
+        title: 'NCS Visualizer',
         height: 600,
         transparent: true,
         frame: false,
