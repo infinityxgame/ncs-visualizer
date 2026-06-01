@@ -129,6 +129,24 @@ If you experience slow performance on systems without dedicated GPU, the applica
 
 **Tip:** Try the Neutralino.js version for better performance on low-end systems.
 
+### Audio capture limitations with certain applications
+
+The visualizer may not work with some desktop applications like Telegram Desktop. This is because:
+
+- Telegram Desktop and similar applications handle audio independently
+- They do not route audio through the operating system's standard stereo mixer
+- This prevents the visualizer from capturing the audio stream
+
+**Affected applications:**
+- Telegram Desktop
+- Other desktop applications that use direct audio sessions or communication-type audio streams
+
+**Workaround:**
+For applications that don't work with the visualizer, try:
+- Using a browser-based version of the application (e.g., Telegram Web)
+- Using applications that route audio through the standard system mixer
+- Testing with music players, browsers (YouTube, Spotify web), or other standard audio applications
+
 ## Technologies Used
 
 - Electron 42.3.0
