@@ -10,3 +10,4 @@
 /obj/Release
 /obj/Debug
 /neutralino/.tmp
+/node_modules
