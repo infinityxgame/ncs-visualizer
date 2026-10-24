@@ -10,6 +10,8 @@
             width: 100%; height: 100%;
             overflow: hidden;
             background: transparent;
+            -webkit-app-region: drag;
+            user-select: none;
         }
 
         canvas {
@@ -18,6 +20,10 @@
             width: 100%; height: 100%;
             z-index: 10;
             object-fit: contain;
+        }
+
+        button, input, #btn-captura, #btn-close, #color-picker-btn {
+            -webkit-app-region: no-drag;
         }
 
         #btn-captura {
@@ -68,33 +74,6 @@
             transform: scale(1.1);
         }
 
-        #btn-color {
-            position: absolute;
-            top: 10px;
-            right: 50px;
-            z-index: 30;
-            width: 30px;
-            height: 30px;
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-        }
-        #btn-color.visible {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        #btn-color:hover {
-            background: rgba(0, 0, 0, 0.8);
-            border-color: #fff;
-            transform: scale(1.1);
-        }
         #color-picker {
             display: none;
         }
@@ -136,13 +115,49 @@
 <input type="color" id="color-picker" value="#ff0000">
 <button id="btn-close">×</button>
 
-
 <script src="renderer.js"></script>
 <script src="shader.js"></script>
 <script src="js/neutralino.js"></script>
 <script>
-    // Inicializar Neutralino
-    Neutralino.init();
+    // Inicializar Neutralino si está disponible
+    if (window.Neutralino) {
+        Neutralino.init();
+
+        // Mover la ventana manteniendo presionado el clic izquierdo en la pantalla
+        let isDragging = false;
+        let initialMouseX = 0, initialMouseY = 0;
+        let initialWinX = 0, initialWinY = 0;
+
+        document.addEventListener('mousedown', async (e) => {
+            if (e.button === 0 && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
+                isDragging = true;
+                initialMouseX = e.screenX;
+                initialMouseY = e.screenY;
+                try {
+                    const pos = await Neutralino.window.getPosition();
+                    initialWinX = pos.x;
+                    initialWinY = pos.y;
+                } catch (err) {}
+            }
+        });
+
+        window.addEventListener('mousemove', async (e) => {
+            if (isDragging) {
+                const deltaX = e.screenX - initialMouseX;
+                const deltaY = e.screenY - initialMouseY;
+                try {
+                    await Neutralino.window.move(
+                        initialWinX + deltaX,
+                        initialWinY + deltaY
+                    );
+                } catch (err) {}
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+    }
 
     const canvas = document.getElementById("visualizer");
     const btn = document.getElementById("btn-captura");
@@ -150,7 +165,6 @@
     const colorPickerBtn = document.getElementById("color-picker-btn");
     const colorPicker = document.getElementById("color-picker");
 
-    // Función para cerrar la aplicación
     function closeApp() {
         if (window.Neutralino) {
             Neutralino.app.exit();
@@ -163,24 +177,20 @@
 
     btnClose.addEventListener("click", closeApp);
 
-    // Mostrar botón de cerrar cuando el mouse entra en la ventana
     document.body.addEventListener("mouseenter", () => {
         btnClose.classList.add("visible");
         colorPickerBtn.classList.add("visible");
     });
 
-    // Ocultar botón de cerrar cuando el mouse sale de la ventana
     document.body.addEventListener("mouseleave", () => {
         btnClose.classList.remove("visible");
         colorPickerBtn.classList.remove("visible");
     });
 
-    // Abrir selector de color al hacer clic en el botón
     colorPickerBtn.addEventListener("click", () => {
         colorPicker.click();
     });
 
-    // Convertir hex a RGB y actualizar fgColor
     colorPicker.addEventListener("input", (e) => {
         const hex = e.target.value;
         const r = parseInt(hex.slice(1, 3), 16) / 255;
@@ -189,7 +199,6 @@
         fgColor = [r, g, b];
     });
 
-    // Atajo de teclado ESC para cerrar
     document.addEventListener("keydown", (e) => {
         if (e.key === "Escape") {
             closeApp();
@@ -200,7 +209,6 @@
     let amplitudes = [];
     let fgColor = [1, 0, 0];
 
-    // Ajustar resolucion del canvas
     function updateResolution(c) {
         const clientSize = Math.min(c.clientWidth, c.clientHeight);
         const screenSize = Math.round(clientSize * window.devicePixelRatio * 0.7);
@@ -209,7 +217,12 @@
         }
     }
 
-    const ctx = canvas.getContext("webgl2", { alpha: true, premultipliedAlpha: false });
+    const ctx = canvas.getContext("webgl2", {
+        alpha: true,
+        premultipliedAlpha: false,
+        preserveDrawingBuffer: true,
+        antialias: false
+    });
 
     if (!ctx) {
         alert("WebGL2 is not supported in this browser.");
@@ -225,7 +238,6 @@
 
     btn.addEventListener("click", async () => {
         try {
-            
             const stream = await navigator.mediaDevices.getDisplayMedia({
                 video: true,
                 audio: true
@@ -235,7 +247,6 @@
             let finalStream = stream;
 
             if (audioTracks.length === 0) {
-                
                 const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 finalStream = micStream;
             }
@@ -293,7 +304,6 @@
         let target = 0;
 
         if (amplitudes.length > 0) {
-
             const sum = amplitudes.reduce((acc, val) => acc + val[0], 0);
             target = sum / amplitudes.length;
         }
@@ -303,9 +313,6 @@
 
         const easing = target > lastAmplitude ? 0.85 : 0.3;
         const amplitude = lastAmplitude + (target - lastAmplitude) * easing;
-        lastAmplitude = amplitude;
- 
-        // Amplitud mínima para movimiento sutil cuando no hay audio
         const minAmplitude = 0.2;
         const finalAmplitude = Math.max(amplitude, minAmplitude);
         lastAmplitude = finalAmplitude;
@@ -316,12 +323,12 @@
             fgColor,
             time,
             finalAmplitude,
-            0.7,  // sphereSize: balanced overall size
-            0.3,  // sphereSizeVariation: How much does the full circle grow with the bass (55% more)
-            0.22,  // noiseAmplitude: Subtle and elegant waves at the edges, just like the original
-            6,   // noiseFrequency
-            150,   // dotCount
-            1      // dotSize
+            0.7,
+            0.3,
+            0.22,
+            6,
+            150,
+            1
         );
 
         requestAnimationFrame(render);

@@ -4,11 +4,11 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-  "start": "electron .",
-  "build": "electron-builder --win portable",
-  "build:nsis": "electron-builder --win nsis",
-  "start:neutralino": "cd neutralino && neu run",
-  "build:neutralino": "cd neutralino && neu build"
+    "start": "electron .",
+    "build": "electron-builder --win portable",
+    "build:nsis": "electron-builder --win nsis",
+    "start:neutralino": "cd neutralino && neu run",
+    "build:neutralino": "cd neutralino && neu build"
   },
   "build": {
     "appId": "com.ncs-infinityxgame.visualizer",

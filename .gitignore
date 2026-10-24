@@ -1,2 +1,12 @@
 /dist/
 /node_modules/electron/
+.idea/caches/deviceStreaming.xml
+.idea/markdown.xml
+.idea/misc.xml
+.idea/modules.xml
+.idea/ncs-visualizer.iml
+.idea/vcs.xml
+/bin
+/obj/Release
+/obj/Debug
+/neutralino/.tmp
